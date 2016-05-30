@@ -1,4 +1,5 @@
-anisyncs = Anisync.select("id, refresh").all.each do |u|
+anisyncs = Anisync.select("alusername, refresh").all.each do |u|
+  puts "Refreshing user #{u.alusername}"
   parameters = {:grant_type => "refresh_token", :client_id => "cor-loasb",
       :client_secret => ENV["CLIENT_SECRET"], :refresh_token => u[:refresh]}
 
@@ -7,3 +8,5 @@ anisyncs = Anisync.select("id, refresh").all.each do |u|
   refreshed = auth["access_token"]
   u.update(:token => refreshed)
 end
+
+puts "Refresh complete."

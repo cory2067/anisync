@@ -7,6 +7,10 @@
   <%= u.label "Authorization Pin" %>
   <%= u.text_field :token %>
 </p>
+<p>
+  Anilist username
+  <%= u.text_field :alusername %>
+</p>
 
 <br>
 <p>Now, enter your MyAnimeList credentials<p>
@@ -24,7 +28,7 @@
 
 <p> To unlink your account, click <%= link_to 'here', anisyncs_remove_url %></p>
 
-<p>Registered users<p>
+<p>Registered users:<p>
 <% @anisyncs.each do |anisync| %>
-  <p><%= anisync.username %>
+  <p><%= anisync.alusername %> / <%= anisync.username %>
 <% end %>
