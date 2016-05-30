@@ -38,19 +38,28 @@ anisyncs = Anisync.all.each do |u|
     add = 0
     if entry['status'] == 'plans to watch'
       add = 6
+    elsif entry['status'] == 'completed'
+      add = 2
+    elsif entry['status'] == 'paused watching'
+      add = 3
+    elsif entry['status'] == 'dropped'
+      add = 4
+    end
+    if add > 0
       xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <entry>
   <episode>0</episode>
-  <status>6</status>
+  <status>#{add}</status>
 </entry>
 "
     ani_id = get_mal(entry['series'])
-    puts(entry['series']['title_romaji'] + ": plan to watch")
+    stat = [nil, nil, 'completed', 'paused', 'dropped', nil, 'plans to watch']
+    puts(entry['series']['title_romaji'] + ": " + stat[add])
   	r = HTTP.basic_auth(:user => u.username, :pass => u.password).get("http://myanimelist.net/api/animelist/"+
                         get_method(ani_id) +"/"+ani_id+".xml", :params => {"data" => xml})
     puts "ERROR: Failed to update" if r.code > 201
     next
-  end
+   end
 
   	if entry['status'] != 'watched episode'
   		next
@@ -71,7 +80,6 @@ anisyncs = Anisync.all.each do |u|
 </entry>
 "
     #submit = {'data':xml.format(ep)}
-    puts get_method(ani_id)
   	r = HTTP.basic_auth(:user => u.username, :pass => u.password).get("http://myanimelist.net/api/animelist/"+get_method(ani_id)+"/"+ani_id+".xml", :params => {"data" => xml})
     puts "ERROR: Failed to update" if r.code > 201
 
