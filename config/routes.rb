@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'anisyncs/index'
+  get 'anisync', to: 'anisyncs#index'
+
+  resources :anisyncs
   get 'home/index'
 
   root 'home#index'

@@ -1,0 +1,28 @@
+<h1>Anisync (pre-alpha)</h1>
+<h2>Register:</h2>
+<h3>First, connect your Anilist account and paste the authorization pin into the form below</h3>
+<iframe scrolling="no" src="http://anilist.co/api/auth/authorize?grant_type=authorization_pin&client_id=cor-loasb&response_type=pin"></iframe>
+<%= form_for @anisync do |u| %>
+<p>
+  <%= u.label "Authorization Pin" %>
+  <%= u.text_field :token %>
+</p>
+
+<br>
+<p>Now, enter your MyAnimeList credentials<p>
+<p>
+  <%= u.label :username %>
+  <%= u.text_field :username %>
+</p>
+<p>
+  <%= u.label :password %>
+  <%= u.password_field :password %>
+</p>
+
+<%= u.submit "Submit" %>
+<% end %>
+
+<p>Registered users<p>
+<% @anisyncs.each do |anisync| %>
+  <p><%= anisync.username %>
+<% end %>
