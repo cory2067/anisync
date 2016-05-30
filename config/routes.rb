@@ -1,9 +1,11 @@
 Rails.application.routes.draw do
   get 'anisyncs/index'
   get 'anisync', to: 'anisyncs#index'
-
-  resources :anisyncs
+  get 'anisyncs/remove'
+  delete 'anisyncs', to: 'anisyncs#destroy'
+  resources :anisyncs, only: [:index, :new, :create]
   get 'home/index'
+
 
   root 'home#index'
   # The priority is based upon order of creation: first created -> highest priority.

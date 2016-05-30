@@ -18,6 +18,19 @@ class AnisyncsController < ApplicationController
     redirect_to "/anisyncs"
   end
 
+  def remove
+    @anisync = Anisync.new
+  end
+
+  def destroy
+    puts params
+    @anisync = Anisync.where(username: params[:anisync][:username]).where(password: params[:anisync][:password]).each do |u|
+      u.destroy
+    end
+
+    redirect_to "/anisyncs"
+  end
+
   private
     def anisync_params
       params.require(:anisync).permit(:username, :password, :token, :refresh)

@@ -22,6 +22,8 @@
 <%= u.submit "Submit" %>
 <% end %>
 
+<p> To unlink your account, click <%= link_to 'here', anisyncs_remove_url %></p>
+
 <p>Registered users<p>
 <% @anisyncs.each do |anisync| %>
   <p><%= anisync.username %>

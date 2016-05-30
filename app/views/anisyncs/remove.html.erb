@@ -1,0 +1,15 @@
+<h1>Unlink your account</h1>
+<p>If you unlink your account, Anisync will stop updating your MAL.<br>However, you are free to re-register to make Anisync active again</p>
+
+<%= form_for @anisync, method: :delete do |u| %>
+  <p>
+    <%= u.label :username %>
+    <%= u.text_field :username %>
+  </p>
+  <p>
+    <%= u.label :password %>
+    <%= u.password_field :password %>
+  </p>
+
+  <%= u.submit "Submit" %>
+<% end %>
