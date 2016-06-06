@@ -4,11 +4,11 @@
 # http://en.wikipedia.org/wiki/Cron
 
 every 15.minutes do
-  runner "app/periodic/update.rb"
+  command "cd /home/rails/anisync && bin/rails runner app/periodic/update.rb"
 end
 
 every 50.minutes do
-  runner "app/periodic/refresh.rb"
+  command "cd /home/rails/anisync && bin/rails runner app/periodic/refresh.rb"
 end
 
 # Example:

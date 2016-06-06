@@ -13,9 +13,6 @@
 
 ActiveRecord::Schema.define(version: 20160530222940) do
 
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
   create_table "animes", force: :cascade do |t|
     t.integer  "alid"
     t.integer  "malid"
@@ -32,15 +29,6 @@ ActiveRecord::Schema.define(version: 20160530222940) do
     t.datetime "updated_at", null: false
     t.text     "alusername"
     t.datetime "sync"
-  end
-
-  create_table "users", force: :cascade do |t|
-    t.text     "username"
-    t.text     "password"
-    t.text     "token"
-    t.text     "refresh"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
 end
