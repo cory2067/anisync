@@ -1,0 +1,19 @@
+<h1>Export to .xml</h1>
+
+<div id="login"</div>
+  <iframe scrolling="no" src="http://anilist.co/api/auth/authorize?grant_type=authorization_pin&client_id=cor-loasb&response_type=pin"></iframe>
+  <%= form_for @anisync, url: export_create_url, remote: true do |u| %>
+  <p>
+    <%= u.label "Authorization Pin" %>
+    <%= u.text_field :token %>
+  </p>
+  <p>
+    Anilist username
+    <%= u.text_field :alusername %>
+  </p>
+  <%= u.submit "Submit" %>
+  <% end %>
+</div>
+
+<div id="prog">
+</div>

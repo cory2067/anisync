@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'export/prog', to:'export#prog'
+  get 'export/index'
+  get 'export', to: 'export#index'
+  post 'export/create', to: 'export#create'
   get 'anisyncs/index'
   get 'anisync', to: 'anisyncs#index'
   get 'anisyncs/remove'

@@ -57,7 +57,7 @@ anisyncs = Anisync.all.each do |u|
   <status>#{add}</status>
 </entry>
 "
-    next if entry['series'] == nil #sometimes happens for some odd reason 
+    next if entry['series'] == nil #sometimes happens for some odd reason
     ani_id = get_mal(entry['series'])
     stat = [nil, nil, 'completed', 'paused', 'dropped', nil, 'plans to watch']
     puts(entry['series']['title_romaji'] + ": " + stat[add])
@@ -94,4 +94,3 @@ anisyncs = Anisync.all.each do |u|
   u.update(:sync => (DateTime.now.utc + 0.3))
   puts "User synchronized!"
 end
-

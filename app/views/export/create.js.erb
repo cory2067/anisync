@@ -1,0 +1,10 @@
+$("#prog").html("Please wait...");
+$("#login").css("display", "none");
+
+var update = function() {
+  $.ajax("/export/prog?name=<%= @user %>").done(function(data) {
+    $('#prog').html(data);
+  });
+}
+
+setInterval(update, 1500);
