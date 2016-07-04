@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160530222940) do
+ActiveRecord::Schema.define(version: 20160701014712) do
 
   create_table "animes", force: :cascade do |t|
     t.integer  "alid"
@@ -29,6 +29,13 @@ ActiveRecord::Schema.define(version: 20160530222940) do
     t.datetime "updated_at", null: false
     t.text     "alusername"
     t.datetime "sync"
+  end
+
+  create_table "mangas", force: :cascade do |t|
+    t.integer  "alid"
+    t.integer  "malid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end

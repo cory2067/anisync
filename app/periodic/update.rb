@@ -1,5 +1,5 @@
 def get_mal(anime)
-  return anime['id'].to_s if anime['id'].to_i < 18672
+  return anime['id'].to_s if anime['id'].to_i < 19285
   existing = Anime.where(:alid => anime['id']).all
   return existing[0][:malid].to_s if existing.size > 0
   show = {'q' => anime['title_romaji']}
@@ -23,6 +23,8 @@ end
 
 anisyncs = Anisync.all.each do |u|
   puts "Beginning sync for user " + u.alusername + " / " + u.username
+  success = true
+  begin
   $list = nil
   $user = u
   puts "Fetching Anilist recent activity..."
@@ -31,6 +33,7 @@ anisyncs = Anisync.all.each do |u|
     puts "Heck! Can't authenticate Anilist."
     next
   end
+  #	puts a.to_s
   anilist = JSON.parse(a.to_s).reverse
   #latest = DateTime.parse(anilist[0]['created_at'])
   if u.sync != nil
@@ -40,12 +43,19 @@ anisyncs = Anisync.all.each do |u|
 
   puts "Synchronizing changes..."
   anilist.each do |entry|
+    type = 0
+    begin
+   	 type = 1 if entry['series']['series_type'] == 'manga'
+    rescue StandardError
+         next
+    end
+    next if type == 1 #temporary
     add = 0
-    if entry['status'] == 'plans to watch'
+    if entry['status'] == 'plans to watch' or entry['status'] == 'plans to read'
       add = 6
     elsif entry['status'] == 'completed'
       add = 2
-    elsif entry['status'] == 'paused watching'
+    elsif entry['status'] == 'paused watching' or entry['status'] == 'paused reading'
       add = 3
     elsif entry['status'] == 'dropped'
       add = 4
@@ -53,7 +63,6 @@ anisyncs = Anisync.all.each do |u|
     if add > 0
       xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <entry>
-  <episode>0</episode>
   <status>#{add}</status>
 </entry>
 "
@@ -63,11 +72,14 @@ anisyncs = Anisync.all.each do |u|
     puts(entry['series']['title_romaji'] + ": " + stat[add])
   	r = HTTP.basic_auth(:user => u.username, :pass => u.password).get("http://myanimelist.net/api/animelist/"+
                         get_method(ani_id) +"/"+ani_id+".xml", :params => {"data" => xml})
-    puts ("ERROR: Failed to update -- " + r.to_s) if r.code > 201
-    next
+     if r.code > 201
+   	 puts ("ERROR: Failed to update -- " + r.to_s)
+         success = false
+     end
+     next
    end
 
-  	if entry['status'] != 'watched episode'
+  	if entry['status'] != 'watched episode' and entry['status'] != 'read chapter'
   		next
     end
 
@@ -87,10 +99,16 @@ anisyncs = Anisync.all.each do |u|
 "
     #submit = {'data':xml.format(ep)}
   	r = HTTP.basic_auth(:user => u.username, :pass => u.password).get("http://myanimelist.net/api/animelist/"+get_method(ani_id)+"/"+ani_id+".xml", :params => {"data" => xml})
-    puts "ERROR: Failed to update" if r.code > 201
-  end
+     if r.code > 201
+   	 puts ("ERROR: Failed to update -- " + r.to_s)
+         success = false
+     end
+end
 
   #idk what time zone anilist is, but it's a bit past utc
-  u.update(:sync => (DateTime.now.utc + 0.3))
+  u.update(:sync => (DateTime.now.utc + 0.3)) if success
+  rescue StandardError => kablooey
+  puts "ERROR: " + kablooey.to_s
+  end
   puts "User synchronized!"
 end
